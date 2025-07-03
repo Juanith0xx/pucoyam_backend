@@ -1,4 +1,3 @@
-// controllers/product.controller.js
 import Producto from '../models/product.model.js';
 
 // Crear producto
@@ -22,8 +21,22 @@ export const obtenerProductos = async (req, res) => {
   }
 };
 
-//Modificar Productos
+// Obtener producto por ID (nuevo)
+export const obtenerProductoPorId = async (req, res) => {
+  const { id } = req.params;
 
+  try {
+    const producto = await Producto.findById(id);
+    if (!producto) {
+      return res.status(404).json({ error: 'Producto no encontrado' });
+    }
+    res.json(producto);
+  } catch (error) {
+    res.status(400).json({ error: 'ID inválido o error al buscar producto' });
+  }
+};
+
+// Modificar producto
 export const modificarProducto = async (req, res) => {
   const { id } = req.params;
   const datosActualizados = req.body;
@@ -42,11 +55,9 @@ export const modificarProducto = async (req, res) => {
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
- 
 };
 
-//Eliminar Producto
-
+// Eliminar producto
 export const eliminarProducto = async (req, res) => {
   const { id } = req.params;
 
@@ -61,5 +72,4 @@ export const eliminarProducto = async (req, res) => {
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
-
 };
