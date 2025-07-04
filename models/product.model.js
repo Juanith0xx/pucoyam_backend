@@ -13,7 +13,11 @@ const productSchema = new mongoose.Schema({
     trim: true,
     match: [/^[A-Z0-9\-]+$/, 'El SKU solo puede contener letras mayúsculas, números y guiones']
   },
-  imagenUrl: { type: String, required: false, trim: true }
+  imagenUrl: {
+    type: [String],
+    default: [],
+    trim: true
+  }
 }, {
   timestamps: true
 });

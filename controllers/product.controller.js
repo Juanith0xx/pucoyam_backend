@@ -12,13 +12,17 @@ export const crearProducto = async (req, res) => {
 };
 
 // Crear producto con imagen (POST multipart/form-data)
-export const crearProductoConImagen = async (req, res) => {
+export const crearProductoConImagenes = async (req, res) => {
   try {
-    const imagenUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    const rutasImagenes = req.files.map(file =>
+      `${req.protocol}://${req.get('host')}/uploads/${file.filename}`
+    );
+
     const nuevoProducto = new Producto({
       ...req.body,
-      imagenUrl
+      imagenUrl: rutasImagenes
     });
+
     const productoGuardado = await nuevoProducto.save();
     res.status(201).json(productoGuardado);
   } catch (error) {

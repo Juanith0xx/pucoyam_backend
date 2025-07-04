@@ -11,7 +11,13 @@ const authMiddleware = async (req, res, next) => {
     const usuario = await Usuario.findById(decoded.id);
     if (!usuario) return res.status(404).json({ mensaje: 'Usuario no encontrado' });
 
-    req.user = usuario;
+    // 👇 Este cambio es clave:
+    req.usuario = {
+      id: usuario._id,
+      rol: usuario.rol,
+      correo: usuario.correo
+    };
+
     next();
   } catch (error) {
     res.status(403).json({ mensaje: 'Token inválido' });

@@ -5,23 +5,23 @@ import {
   registrarUsuario,
   loginUsuario,
   obtenerUsuarios,
-  cambiarRol
+  cambiarRol,
+  obtenerPerfil // ✅ Importamos obtenerPerfil
 } from '../controllers/usuario.controller.js';
 
 const router = express.Router();
 
+// Registro y login
 router.post('/registro', registrarUsuario);
 router.post('/login', loginUsuario);
 
-// Nuevo endpoint para obtener solo el perfil autenticado
-router.get('/perfil', authMiddleware, (req, res) => {
-  res.json(req.user);
-});
+// Perfil del usuario autenticado
+router.get('/perfil', authMiddleware, obtenerPerfil);
 
-// Usuarios autenticados pueden ver lista completa
+// Obtener lista de usuarios (autenticado)
 router.get('/', authMiddleware, obtenerUsuarios);
 
-// Solo admins pueden cambiar roles
-router.put('/:id/rol', authMiddleware, authorize('admin'), cambiarRol);
+// Cambiar rol de usuario (solo Admin)
+router.put('/:id/rol', authMiddleware, authorize('Admin'), cambiarRol);
 
 export default router;

@@ -2,6 +2,9 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import Usuario from '../models/usuario.model.js';
 
+// Roles permitidos definidos para validación
+const rolesPermitidos = ['Admin', 'Supervisor', 'Empleado'];
+
 // Registrar nuevo usuario
 export const registrarUsuario = async (req, res) => {
   const { correo, password, rol } = req.body;
@@ -17,7 +20,7 @@ export const registrarUsuario = async (req, res) => {
     const nuevoUsuario = new Usuario({
       correo,
       password: hash,
-      rol: rol || 'vendedor'
+      rol: rolesPermitidos.includes(rol) ? rol : 'Empleado'
     });
 
     await nuevoUsuario.save();
@@ -59,6 +62,20 @@ export const loginUsuario = async (req, res) => {
   }
 };
 
+// Obtener el perfil del usuario autenticado
+export const obtenerPerfil = (req, res) => {
+  const usuario = req.usuario;
+  if (!usuario) {
+    return res.status(401).json({ error: 'Usuario no autenticado' });
+  }
+
+  res.json({
+    id: usuario.id,
+    correo: usuario.correo,
+    rol: usuario.rol
+  });
+};
+
 // Obtener todos los usuarios (solo admin)
 export const obtenerUsuarios = async (req, res) => {
   try {
@@ -74,7 +91,6 @@ export const cambiarRol = async (req, res) => {
   const { id } = req.params;
   const { nuevoRol } = req.body;
 
-  const rolesPermitidos = ['vendedor', 'supervisor', 'admin'];
   if (!rolesPermitidos.includes(nuevoRol)) {
     return res.status(400).json({ error: 'Rol inválido' });
   }

@@ -1,7 +1,7 @@
 import express from 'express';
 import {
   crearProducto,
-  crearProductoConImagen,
+  crearProductoConImagenes,
   obtenerProductos,
   obtenerProductoPorId,
   modificarProducto,
@@ -10,11 +10,18 @@ import {
 
 import authMiddleware from '../middlewares/authMiddleware.js';
 import upload from '../middlewares/upload.middleware.js';
+import permitirRoles from '../middlewares/rolMiddleware.js';
 
 const router = express.Router();
 
-// Crear producto con imagen (multipart/form-data)
-router.post('/crear-con-imagen', authMiddleware, upload.single('imagen'), crearProductoConImagen);
+// Crear producto con múltiples imágenes (solo Admin o Supervisor)
+router.post(
+  '/crear-con-imagenes',
+  authMiddleware,
+  permitirRoles('Admin', 'Supervisor'),
+  upload.array('imagenes', 10),
+  crearProductoConImagenes
+);
 
 // Crear producto sin imagen (JSON)
 router.post('/', authMiddleware, crearProducto);
