@@ -9,7 +9,9 @@ const router = express.Router();
 router.post('/', authMiddleware, crearProducto);
 router.get('/', obtenerProductos);
 router.get('/:id', obtenerProductoPorId);
+
 router.put('/:id', authMiddleware, modificarProducto);
+
 router.delete('/:id', authMiddleware, eliminarProducto);
 
 export default router;

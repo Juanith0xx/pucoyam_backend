@@ -7,7 +7,7 @@ import cors from 'cors';
 // Rutas
 import productRoutes from './routes/product.routes.js';
 import usuarioRoutes from './routes/usuario.routes.js';
-import authMiddleware from './middlewares/authMiddleware.js';
+
 dotenv.config();
 
 const app = express();
