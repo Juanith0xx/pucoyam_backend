@@ -16,6 +16,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use('/uploads', express.static('uploads'));
+
 // Rutas principales
 app.use('/api/productos', productRoutes);
 app.use('/api/usuarios', usuarioRoutes);

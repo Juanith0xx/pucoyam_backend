@@ -9,10 +9,11 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: [true, 'El SKU es obligatorio'],
     unique: true,
-    uppercase: true, // <-- fuerza a guardar en mayúsculas
+    uppercase: true,
     trim: true,
     match: [/^[A-Z0-9\-]+$/, 'El SKU solo puede contener letras mayúsculas, números y guiones']
-  }
+  },
+  imagenUrl: { type: String, required: false, trim: true }
 }, {
   timestamps: true
 });

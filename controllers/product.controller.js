@@ -1,9 +1,24 @@
 import Producto from '../models/product.model.js';
 
-// Crear producto
+// Crear producto sin imagen (JSON plano)
 export const crearProducto = async (req, res) => {
   try {
     const nuevoProducto = new Producto(req.body);
+    const productoGuardado = await nuevoProducto.save();
+    res.status(201).json(productoGuardado);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// Crear producto con imagen (POST multipart/form-data)
+export const crearProductoConImagen = async (req, res) => {
+  try {
+    const imagenUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    const nuevoProducto = new Producto({
+      ...req.body,
+      imagenUrl
+    });
     const productoGuardado = await nuevoProducto.save();
     res.status(201).json(productoGuardado);
   } catch (error) {
@@ -21,7 +36,7 @@ export const obtenerProductos = async (req, res) => {
   }
 };
 
-// Obtener producto por ID (nuevo)
+// Obtener producto por ID
 export const obtenerProductoPorId = async (req, res) => {
   const { id } = req.params;
 
